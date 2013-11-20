@@ -1,15 +1,15 @@
 <?php
 /**
- * Project:     ArCaptcha: A PHP class for creating and managing form Arabic CAPTCHA images<br />
+ * Project:     ArCaptcha: A PHP class for creating and managing Arabic CAPTCHA images
  * File:        GetArCaptcha.php
  *
  * Copyright (c) 2013, Mohammad Anini
- * All rights reserved.
+ * The project is licensed under a Creative Commons BY-NC-SA 3.0 License.
  *
- * @link http://arcaptcha.anini.me/en ArCaptcha Arabic PHP CAPTCHA
- * @link http://arcaptcha.anini.me/en/download Download Latest Version
- * @link http://arcaptcha.anini.me/en/docs Online Documentation
- * @link http://arcaptcha.anini.me/en/demo Generate Customized Code
+ * @link http://arcaptcha.anini.me/					ArCaptcha Arabic PHP CAPTCHA
+ * @link http://arcaptcha.anini.me/download 		Download Latest Version
+ * @link http://arcaptcha.anini.me/documentation 	Online Documentation
+ * @link http://arcaptcha.anini.me/demo 			Generate Customized Code
  * @copyright 2013 Anini
  * @author Mohammad Anini <mohd.anini@gmail.com>
  * @version 1.0.0 (November 8, 2013)

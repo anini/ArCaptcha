@@ -1,4 +1,20 @@
 <?php
+/**
+ * Project:     ArCaptcha: A PHP class for creating and managing Arabic CAPTCHA images
+ * File:        ArCaptcha.php
+ *
+ * Copyright (c) 2013, Mohammad Anini
+ * The project is licensed under a Creative Commons BY-NC-SA 3.0 License.
+ *
+ * @link http://arcaptcha.anini.me/					ArCaptcha Arabic PHP CAPTCHA
+ * @link http://arcaptcha.anini.me/download 		Download Latest Version
+ * @link http://arcaptcha.anini.me/documentation 	Online Documentation
+ * @link http://arcaptcha.anini.me/demo 			Generate Customized Code
+ * @copyright 2013 Anini
+ * @author Mohammad Anini <mohd.anini@gmail.com>
+ * @version 1.0.0 (November 8, 2013)
+ * @package ArCaptcha
+ */
 
 class ArCaptcha
 {
@@ -33,7 +49,8 @@ class ArCaptcha
 	 */
 	public $fixed_verify_code;
 	/**
-	 * @var integer number characters of the verify code. Defaults to 4.
+	 * @var integer number characters of the verify code.
+	 * Minimum value is 3 and maximum value is 28. Defaults to 4.
 	 */
 	public $length = 4;
 	/**
@@ -91,7 +108,9 @@ class ArCaptcha
     {
     	// Used for automated test
     	if ($this->fixed_verify_code !== null)
-			return $this->fixed_verify_code;
+    	{
+    		return $this->fixed_verify_code;
+    	}
 
 		// Start a new session of it's not active
 		if (!isset($_SESSION))//session_status() !== PHP_SESSION_ACTIVE)
@@ -149,7 +168,16 @@ class ArCaptcha
 		// Validating the public options before using them
 		//$this->validateOptions();
 
-		// Caculating the width and height of the generated captcha image
+		// Calculating length value and cleaning fixed_verify_code if is set
+    	if ($this->fixed_verify_code !== null)
+    	{
+    		$this->fixed_verify_code = preg_replace('/[\s]/u', '', $this->fixed_verify_code);
+    		$this->length = mb_strlen($this->fixed_verify_code);
+    		$this->fixed_verify_code = preg_replace('/(.)/u', '$1 ', $this->fixed_verify_code);
+    		$this->fixed_verify_code = trim($this->fixed_verify_code);
+    	}
+
+		// Calculating the width and height of the generated captcha image
 		$this->calculateSize();
 
 		// Creating image
@@ -159,7 +187,7 @@ class ArCaptcha
 
 		if($this->transparent)
 		{
-			// removing the back_color from the image (making it transparent)
+			// Removing the back_color from the image (making it transparent)
 			imagecolortransparent($image, $this->back_color);
 		}
 
@@ -320,8 +348,8 @@ class ArCaptcha
      */
     function getRandomColor()
     {
-    	$max = $this->darkness_level * 25;
-    	$min = $this->darkness_level * 10;
+    	$max = (11 - $this->darkness_level) * 25;
+    	$min = (11 - $this->darkness_level) * 10;
     	$hex = sprintf('0X%02X%02X%02X', mt_rand($min, $max), mt_rand($min, $max), mt_rand($min, $max));
     	//$hex = sprintf('0X%02X%02X%02X', mt_rand(0, 127), mt_rand(0, 127), mt_rand(0, 127));
     	return $hex;
