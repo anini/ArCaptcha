@@ -8,7 +8,7 @@
  *
  * @link http://arcaptcha.anini.me/					ArCaptcha Arabic PHP CAPTCHA
  * @link http://arcaptcha.anini.me/download 		Download Latest Version
- * @link http://arcaptcha.anini.me/documentation 	Online Documentation
+ * @link http://arcaptcha.anini.me/user-guide	 	Online Documentation
  * @link http://arcaptcha.anini.me/demo 			Generate Customized Code
  * @copyright 2013 Anini
  * @author Mohammad Anini <mohd.anini@gmail.com>
@@ -23,12 +23,12 @@ class ArCaptcha
 	 */
 	public $transparent = true;
 	/**
-	 * @var integer the background color. For example, 0xC8F0F0.
+	 * @var hex the background color. For example, 0xC8F0F0.
 	 * Defaults to 0xFFFFFF, meaning white color.
 	 */
 	public $back_color = 0xFFFFFF;
 	/**
-	 * @var integer the font color. For example, 0x55FF00. Defaults to 0xDCDCC8.
+	 * @var hex the font color. For example, 0x55FF00. Defaults to 0xDCDCC8.
 	 */
 	public $noise_color = 0xDCDCC8;
 	/**
@@ -76,6 +76,12 @@ class ArCaptcha
 	 */
 	public $shadow = false;
 	/**
+     * @var string the session name ArCaptcha should use, only set this if your
+     * application uses a custom session name
+     * @var string
+     */
+    public $session_name = null;
+	/**
 	 * @var array of the arabic letters.
 	 */
 	protected $arabic_letters;
@@ -112,12 +118,18 @@ class ArCaptcha
     		return $this->fixed_verify_code;
     	}
 
-		// Start a new session of it's not active
-		if (!isset($_SESSION))//session_status() !== PHP_SESSION_ACTIVE)
-		{
-			session_start();
-		}
-
+    	// Initialize session or attach to existing
+    	if (!isset($_SESSION))
+    	{
+    		// No session has been started yet, which is needed for validation
+    		if (!is_null($this->session_name) && trim($this->session_name) != '')
+    		{
+    			// Set session name if provided
+    			session_name(trim($this->session_name));
+    		}
+    		session_start();
+    	}
+    	
 		$key = $this->getSessionKey();
 		if (!isset($_SESSION[$key]) || $regenerate)
 		{

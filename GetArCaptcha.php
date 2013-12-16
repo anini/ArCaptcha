@@ -8,7 +8,7 @@
  *
  * @link http://arcaptcha.anini.me/					ArCaptcha Arabic PHP CAPTCHA
  * @link http://arcaptcha.anini.me/download 		Download Latest Version
- * @link http://arcaptcha.anini.me/documentation 	Online Documentation
+ * @link http://arcaptcha.anini.me/user-guide	 	Online Step by Step Guide
  * @link http://arcaptcha.anini.me/demo 			Generate Customized Code
  * @copyright 2013 Anini
  * @author Mohammad Anini <mohd.anini@gmail.com>
@@ -29,8 +29,8 @@ $img = new ArCaptcha();
  * You can customize the image by making changes below - remove the "//" to uncomment
  */
 // $img->transparent	= true; // boolean whether to use transparent background.
-// $img->back_color		= 0xFFFFFF; // integer the background color. For example, 0xC8F0F0.
-// $img->noise_color	= 0xDCDCC8; // integer the font color. For example, 0x55FF00.
+// $img->back_color		= 0xFFFFFF; // hex the background color. For example, 0xC8F0F0.
+// $img->noise_color	= 0xDCDCC8; // hex the font color. For example, 0x55FF00.
 // $img->darkness_level	= 5; // integer darkness level of the characters color. Minimum value is 1 and maximum value is 10.
 // $img->font_file		= '//assets/DroidNaskh.ttf'; // string the TrueType font file path.
 // $img->length			= 4; // integer number characters of the verify code. Minimum value is 3 and maximum value is 28.
@@ -40,6 +40,7 @@ $img = new ArCaptcha();
 // $img->draw_noise		= true; // boolean whether to draws noise on the image.
 // $img->shadow			= false; // boolean whether to add shadow to the letters.
 // $img->fixed_verify_code = null; // string the fixed verification code. For automated tests.
+// $this->session_name = null; // string the session name ArCaptcha should use, only set this if your application uses a custom session name
 
 /**
  * Outputs the image and content headers to the browser
