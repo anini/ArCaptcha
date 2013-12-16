@@ -13,8 +13,8 @@ ArCaptcha (Arabic Captcha) is an open-source free PHP CAPTCHA script for generat
 ## Requirements
 PHP 4 >= 4.0.6, PHP 5 with GD support
 
-#
-
+# 
+<div style="direction: rtl">
 ##ما هي عركابتشا؟
 
 عركابتشا (ArCaptcha) هي مخطوطة (script) مجانية ومفتوحة المصدر مبنية بلغة PHP لتوليد صور ورموز تحقق كابتشا عربية معقدة لحماية النماذج من التطفل (spam) والإزعاج. ويمكن إضافتها بسهولة إلى النماذج الموجودة على موقع الويب الخاص بك لتوفير الحماية من المتطفلين (spam bots). يمكن تشغيلها على أي خادم ويب (webserver) تقريباً طالما أن PHP ودعم GD مثبت لديك. عركابتشا تقوم بكل شيء من توليد صور كابتشا إلى التحقق من صحة رمز التحقق المدخل.
@@ -27,3 +27,4 @@ PHP 4 >= 4.0.6, PHP 5 with GD support
 
 ## المتطلبات
 PHP 4 >= 4.0.6, PHP 5 مع دعم GD
+</div>
