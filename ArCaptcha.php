@@ -6,12 +6,12 @@
  * Copyright (c) 2013, Mohammad Anini
  * The project is licensed under a Creative Commons BY-NC-SA 3.0 License.
  *
- * @link http://arcaptcha.anini.me/					ArCaptcha Arabic PHP CAPTCHA
- * @link http://arcaptcha.anini.me/download 		Download Latest Version
- * @link http://arcaptcha.anini.me/user-guide	 	Online Documentation
- * @link http://arcaptcha.anini.me/demo 			Generate Customized Code
+ * @link https://arcaptcha.anini.me/				ArCaptcha Arabic PHP CAPTCHA
+ * @link https://arcaptcha.anini.me/download 		Download Latest Version
+ * @link https://arcaptcha.anini.me/user-guide	 	Online Documentation
+ * @link https://arcaptcha.anini.me/demo 			Generate Customized Code
  * @copyright 2013 Anini
- * @author Mohammad Anini <mohd.anini@gmail.com>
+ * @author Mohammad Anini <https://anini.me>
  * @version 1.0.0 (November 8, 2013)
  * @package ArCaptcha
  */
