@@ -4,7 +4,7 @@
  * File:        ArCaptcha.php
  *
  * Copyright (c) 2013, Mohammad Anini
- * The project is licensed under a Creative Commons BY-NC-SA 3.0 License.
+ * The project is licensed under the GNU General Public License v3.0.
  *
  * @link https://arcaptcha.anini.me/				ArCaptcha Arabic PHP CAPTCHA
  * @link https://arcaptcha.anini.me/download 		Download Latest Version
@@ -37,9 +37,11 @@ class ArCaptcha
 	 */
 	public $darkness_level = 5;
 	/**
-	 * @var string the TrueType font file. Defaults to DroidNaskh.ttf which is provided.
+	 * @var string the TrueType font file. Defaults to the bundled DroidNaskh.ttf
+	 * shipped under assets/. Set to an absolute path or one resolvable from the
+	 * server's current working directory to override.
 	 */
-	public $font_file = '//assets/DroidNaskh.ttf';
+	public $font_file;
 	/**
 	 * @var string the fixed verification code. When this is property is set,
 	 * {@link getVerifyCode} will always return this value.
@@ -98,6 +100,7 @@ class ArCaptcha
 
     function __construct()
     {
+    	$this->font_file = __DIR__ . '/assets/DroidNaskh.ttf';
     	$this->arabic_letters = array(
     		'أ','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ﮬ','و','ي'
     		);
@@ -194,13 +197,16 @@ class ArCaptcha
 
 		// Creating image
 		$image = imagecreatetruecolor($this->width, $this->height);
+		// PHP 8's GD requires strict integer color values, so coerce once here
+		// and reuse - back_color may have been set as a hex string by callers.
+		$back_color = self::colorToInt($this->back_color);
 		// Filling image with back_color
-		imagefill($image, 0, 0, $this->back_color);
+		imagefill($image, 0, 0, $back_color);
 
 		if($this->transparent)
 		{
 			// Removing the back_color from the image (making it transparent)
-			imagecolortransparent($image, $this->back_color);
+			imagecolortransparent($image, $back_color);
 		}
 
 		if($this->draw_noise)
@@ -262,11 +268,12 @@ class ArCaptcha
      */
     protected function drawNoise($image)
     {
+    	$noise_color = self::colorToInt($this->noise_color);
     	for ($i = 0; $i < $this->width; $i++)
     	{
 		    for ($j = 0; $j < $this->height; $j++)
 		    {
-		        if (mt_rand(0,1) == 1) imagesetpixel($image, $i, $j, $this->noise_color);
+		        if (mt_rand(0,1) == 1) imagesetpixel($image, $i, $j, $noise_color);
 		    }
 		}
     }
@@ -322,6 +329,7 @@ class ArCaptcha
      */
     protected function drawLines($image)
     {
+        $noise_color = self::colorToInt($this->noise_color);
         for ($line = 0; $line < $this->num_lines; ++ $line) {
             $x = $this->width * (1 + $line) / ($this->num_lines + 1);
             $x += (0.5 - $this->getFloatRand()) * $this->width / $this->num_lines;
@@ -349,22 +357,54 @@ class ArCaptcha
             for ($i = 0; $i < $n; ++ $i) {
                 $x = $x0 + $i * $dx + $amp * $dy * sin($k * $i * $step + $phi);
                 $y = $y0 + $i * $dy - $amp * $dx * sin($k * $i * $step + $phi);
-                imagefilledrectangle($image, $x, $y, $x + $lwid, $y + $lwid, $this->noise_color);
+                imagefilledrectangle($image, $x, $y, $x + $lwid, $y + $lwid, $noise_color);
             }
         }
     }
 
     /**
-     * Return a random color
-     * @return hex random dark color
+     * Return a random dark color as a packed RGB integer (0..0xFFFFFF).
+     * @return int random dark color
      */
     function getRandomColor()
     {
     	$max = (11 - $this->darkness_level) * 25;
     	$min = (11 - $this->darkness_level) * 10;
-    	$hex = sprintf('0X%02X%02X%02X', mt_rand($min, $max), mt_rand($min, $max), mt_rand($min, $max));
-    	//$hex = sprintf('0X%02X%02X%02X', mt_rand(0, 127), mt_rand(0, 127), mt_rand(0, 127));
-    	return $hex;
+    	return (mt_rand($min, $max) << 16) | (mt_rand($min, $max) << 8) | mt_rand($min, $max);
+    }
+
+    /**
+     * Coerces a color value to an integer suitable for GD image functions.
+     * Accepts:
+     *   - int                       → returned as-is
+     *   - "0xRRGGBB" / "0XRRGGBB"   → parsed as hex
+     *   - "#RRGGBB"                 → parsed as hex
+     *   - "RRGGBB"                  → parsed as hex
+     *   - decimal numeric string    → parsed as decimal
+     * Anything else falls back to white (0xFFFFFF).
+     *
+     * Required since PHP 8 - earlier versions silently cast strings to int
+     * for GD functions like imagefill(); PHP 8 raises a TypeError instead.
+     *
+     * @param  int|string $value the color value
+     * @return int        the color as a packed RGB integer
+     */
+    protected static function colorToInt($value)
+    {
+    	if (is_int($value)) {
+    		return $value;
+    	}
+    	$value = trim((string) $value);
+    	if ($value === '') {
+    		return 0xFFFFFF;
+    	}
+    	if (preg_match('/^(?:0[xX]|#)?([0-9a-fA-F]{6})$/', $value, $m)) {
+    		return hexdec($m[1]);
+    	}
+    	if (ctype_digit($value)) {
+    		return (int) $value;
+    	}
+    	return 0xFFFFFF;
     }
 
     /**

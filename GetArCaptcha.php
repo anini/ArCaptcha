@@ -4,7 +4,7 @@
  * File:        GetArCaptcha.php
  *
  * Copyright (c) 2013, Mohammad Anini
- * The project is licensed under a Creative Commons BY-NC-SA 3.0 License.
+ * The project is licensed under the GNU General Public License v3.0.
  *
  * @link https://arcaptcha.anini.me/				    	  ArCaptcha Arabic PHP CAPTCHA
  * @link https://arcaptcha.anini.me/download 	  	  Download Latest Version

@@ -13,4 +13,4 @@ ArCaptcha (Arabic Captcha) is an open-source free PHP CAPTCHA script for generat
 * Ask and interact in the <a href="https://arcaptcha.anini.me/discussions">discussions page</a>
 
 ## Requirements
-PHP 4 >= 4.0.6, PHP 5 with GD support
+PHP 7.4+ (tested on PHP 8.x), with GD and FreeType (TrueType) font support.
